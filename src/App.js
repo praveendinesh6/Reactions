@@ -1,29 +1,42 @@
-import './App.css';
-import {useEffect} from 'react'
-import store from './store'
-import Orders from './components/Orders'
+import "./App.css";
+import { useEffect } from "react";
+import store from "./store";
+import Orders from "./components/Orders";
 import axios from "axios";
-import { storeUsersLists, storeReactionsList } from './actions'
+import { LightTheme, BaseProvider } from "baseui";
+import { Client as Styletron } from "styletron-engine-atomic";
+import { Provider as StyletronProvider } from "styletron-react";
 
-const fetchOrgInfo = () => async dispatch => {
+import { storeUsersLists, storeReactionsList } from "./actions";
+
+const engine = new Styletron();
+
+const fetchOrgInfo = () => async (dispatch) => {
   try {
-      let userResponse = await axios.get('https://artful-iudex.herokuapp.com/users')
-      dispatch(storeUsersLists(userResponse.data))
-      let reactionResponse = await axios.get('https://artful-iudex.herokuapp.com/reactions')
-      dispatch(storeReactionsList(reactionResponse.data))
-    } catch (err) {}
-  }
+    let userResponse = await axios.get(
+      "https://artful-iudex.herokuapp.com/users"
+    );
+    dispatch(storeUsersLists(userResponse.data));
+    let reactionResponse = await axios.get(
+      "https://artful-iudex.herokuapp.com/reactions"
+    );
+    dispatch(storeReactionsList(reactionResponse.data));
+  } catch (err) {}
+};
 
 function App() {
-
   useEffect(() => {
-    store.dispatch(fetchOrgInfo())
-  }, [])
+    store.dispatch(fetchOrgInfo());
+  }, []);
 
   return (
-    <div className="overscroll-y-none" id="main">
-      <Orders />
-    </div>
+    <StyletronProvider value={engine}>
+      <BaseProvider theme={LightTheme}>
+        <div className="overscroll-y-none" id="main">
+          <Orders />
+        </div>
+      </BaseProvider>
+    </StyletronProvider>
   );
 }
 

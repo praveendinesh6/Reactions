@@ -1,27 +1,16 @@
-import { useState } from "react";
 import ReactionItem from "./ReactionItem";
 import EmojiChooser from "./EmojiChooser";
 import ReactionSummary from "./ReactionSummary";
-import Modal from "react-modal";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
+import { StatefulPopover, TRIGGER_TYPE } from "baseui/popover";
+import { Block } from "baseui/block";
 
-const customStyles = {
-  content: {
-    minWidth: "400px",
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    padding: "0px",
-    transform: "translate(-50%, -50%)",
-    boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
-    borderColor: 'transparent'
-  },
-};
-
-function UserReactions({ userContentReactionsList, handleReactionClicked, reactionsList, currentUserId }) {
-  const [showReactionSummary, setShowReactionSummary] = useState(false);
+function UserReactions({
+  userContentReactionsList,
+  handleReactionClicked,
+  reactionsList,
+  currentUserId,
+}) {
 
   let reactionsCountList = [];
   reactionsList.forEach((reaction) => {
@@ -31,7 +20,7 @@ function UserReactions({ userContentReactionsList, handleReactionClicked, reacti
       if (orderItem.reaction_id === reaction.id) {
         count++;
         if (orderItem.user_id === currentUserId) {
-          reactionCountInfo["is_current_user_reacted"] = true;
+          reactionCountInfo["isCurrentUserReacted"] = true;
         }
       }
     });
@@ -41,36 +30,46 @@ function UserReactions({ userContentReactionsList, handleReactionClicked, reacti
     }
   });
 
-  function openReactionSummary() {
-    setShowReactionSummary(true);
-  }
-  function closeReactionSummary() {
-    setShowReactionSummary(false);
-  }
-  Modal.setAppElement('#main');
   return (
     <>
       <div className="flex p-3">
-        {reactionsCountList.map((reactionInfo) => {
+        {reactionsCountList.map((reactionInfo, index) => {
           return (
-            <ReactionItem
-              reactionInfo={reactionInfo}
+            <StatefulPopover
               key={reactionInfo.id}
-              openReactionSummary={openReactionSummary}
-            />
+              content={() => (
+                <Block>
+                  <ReactionSummary
+                    key={reactionInfo.id}
+                    defaultIndex={index+1}
+                    reactionsCountList={reactionsCountList}
+                    userContentReactionsList={userContentReactionsList}
+                  />
+                </Block>
+              )}
+              triggerType={TRIGGER_TYPE.hover}
+              returnFocus
+              autoFocus
+              overrides={{
+                Inner: {
+                  style: () => ({
+                    'background-color': '#fff',
+                    'border-radius': '4px'
+                  })
+                }
+              }}
+            >
+              <Block>
+                <ReactionItem
+                reactionInfo={reactionInfo}
+                  key={reactionInfo.id}
+                  handleReactionClicked={handleReactionClicked}
+              />
+            </Block>
+            </StatefulPopover>
           );
         })}
         <EmojiChooser handleReactionClicked={handleReactionClicked} />
-
-        <Modal
-          isOpen={showReactionSummary}
-          onRequestClose={closeReactionSummary}
-          style={customStyles}
-          preventScroll={true}
-          contentLabel="Reaction Summary"
-        >
-          <ReactionSummary reactionsCountList={reactionsCountList} userContentReactionsList={userContentReactionsList} />
-        </Modal>
       </div>
     </>
   );
@@ -79,7 +78,7 @@ function UserReactions({ userContentReactionsList, handleReactionClicked, reacti
 function mapStateToProps(state) {
   return {
     reactionsList: state.reactionsList,
-    currentUserId: state.currentUserId
+    currentUserId: state.currentUserId,
   };
 }
 

@@ -18,6 +18,7 @@
   padding-top: 3px;
   font-weight: 500;
   font-size: 16px;
+  cursor: pointer;
 }
 .user-reacted {
   border-color: #0f62fe;
@@ -67,8 +68,20 @@
   padding: 0px 16px;
   border-bottom: 2px solid #e0e0e0;
 }
+.reaction-summary {
+  font-size: 14px;
+}
+.reaction-summary-header {
+  padding-left: 15px;
+}
+.reaction-summary-tab:first-child {
+  padding-left: 20px;
+}
+.reaction-summary-content-row {
+  padding-left: 3px;
+}
 .reaction-summary-tab.reaction-summary-all {
-  padding: 8px 15px;
+  padding: 9px 15px;
 }
 .reaction-summary-tab-selected {
   font-weight: bold;
@@ -110,5 +123,5 @@
   transform: translate(-50%, -50%) rotate(180deg);
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
+  border-color: transparent transparent #0d0d0d transparent;
 }

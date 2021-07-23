@@ -21,7 +21,7 @@ function ReactionSummaryContent({ reactionId = '', userContentReactionsList, use
   return (
       <div>
       {userReactionList.map((reactionInfo) => {
-        return <div className="flex px-4 py-2 items-center">
+        return <div className="reaction-summary-content-row flex px-4 py-2 items-center">
           <img className="user-image rounded-full mr-3" src={usersMap[reactionInfo.user_id].avatar} alt={usersMap[reactionInfo.user_id].first_name} />
           <div role="img" className="emoji pr-3" aria-label={reactionsMap[reactionInfo.reaction_id].name}>{reactionsMap[reactionInfo.reaction_id].emoji}</div>
           <div className="font-medium">

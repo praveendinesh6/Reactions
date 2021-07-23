@@ -2,12 +2,12 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import ReactionSummaryContent from "./ReactionSummaryContent";
 import "react-tabs/style/react-tabs.css";
 
-function ReactionSummary({ reactionsCountList, userContentReactionsList }) {
+function ReactionSummary({ reactionsCountList, userContentReactionsList, defaultIndex }) {
   return (
-    <div>
-      <div className="font-semibold pl-5 pt-5">Reactions</div>
-      <Tabs selectedTabClassName="reaction-summary-tab-selected">
-        <TabList className="flex reaction-summary-tablist items-center">
+    <div className="reaction-summary">
+      <div className="reaction-summary-header font-semibold pt-5">Reactions</div>
+      <Tabs selectedTabClassName="reaction-summary-tab-selected" defaultIndex={defaultIndex}>
+        <TabList className="grid eaction-summary-tablist items-center justify-items-stretch grid-flow-col	">
           <Tab className="flex reaction-summary-tab items-center reaction-summary-all">
             All
           </Tab>

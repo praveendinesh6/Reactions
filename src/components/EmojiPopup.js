@@ -18,6 +18,7 @@ function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsList }) {
         return (
           <div
             className="emoji-popup-item"
+            key={reaction.id}
             onClick={() => handleOnClick(reaction.id)}
           >
             <Tooltip text={reaction.name}>
