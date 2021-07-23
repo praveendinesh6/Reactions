@@ -10,12 +10,12 @@
 }
 .user-reaction-item {
   width: 55px;
-  height: 34px;
-  border-radius: 23px;
+  height: 32px;
+  border-radius: 24px;
   border: 1px solid #e0e0e0;
   background-color: #edf5ff;
   margin-right: 8px;
-  padding-top: 4px;
+  padding-top: 3px;
   font-weight: 500;
   font-size: 16px;
 }
@@ -51,8 +51,38 @@
 }
 .emoji-popup-item:hover .emoji {
   transform: scale(2) translate(0%, -17%);
-  /* transform: scale(1.35) translateY(-28%);
-  transition: transform 0.2s; */
+}
+.round-bubble {
+  width: 4px;
+  height: 4px;
+  background: #000;
+  border-radius: 50%;
+}
+.reaction-summary-tablist {
+  padding-top: 10px;
+}
+.reaction-summary-tab {
+  min-width: 55px;
+  cursor: pointer;
+  padding: 0px 16px;
+  border-bottom: 2px solid #e0e0e0;
+}
+.reaction-summary-tab.reaction-summary-all {
+  padding: 8px 15px;
+}
+.reaction-summary-tab-selected {
+  font-weight: bold;
+  border-color: #0f62fe;
+}
+.react-tabs__tab-panel {
+  height: 300px;
+  padding: 10px 0 0 10px;
+  overflow: scroll;
+}
+
+.user-image {
+  width: 25px;
+  height: 25px;
 }
 
 /* Tooltip CSS */

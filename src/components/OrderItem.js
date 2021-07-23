@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UserReactions from './UserReactions';
-import { currentUserId } from './constants'
 import axios from "axios";
+import { connect } from 'react-redux';
 
 const userContentReactions = [
   {
@@ -109,8 +109,16 @@ const userContentReactions = [
 ]
 
 
-function OrderItem({ orderItem }) {
+function OrderItem({ orderItem, currentUserId }) {
   const [userContentReactionsList, setuserContentReactionsList] = useState(userContentReactions)
+
+  function fetchUserReactions() {
+    return axios
+      .get(`https://artful-iudex.herokuapp.com/user_content_reactions?content_id=${orderItem.id}`)
+      .then((response) => {
+        setuserContentReactionsList(response.data)
+      });
+  }
 
   function handleRemoveReaction(userContentReactionInfo) {
     // return axios
@@ -153,6 +161,10 @@ function OrderItem({ orderItem }) {
     }
   }
 
+  // useEffect(() => {
+  //   fetchUserReactions()
+  // }, [])
+
   return (
     <div className="border border-gray-500 rounded mb-4">
       <div className="grid grid-rows-3 grid-flow-col gap-4 p-4 pl-12">
@@ -181,8 +193,14 @@ function OrderItem({ orderItem }) {
           <div>${orderItem.total}</div>
         </div>
       </div>
-      <UserReactions reactions={userContentReactionsList} handleReactionClicked={handleReactionClicked} />
+      <UserReactions userContentReactionsList={userContentReactionsList} handleReactionClicked={handleReactionClicked} />
     </div>
   );
 }
-export default OrderItem;
+function mapStateToProps(state) {
+  return {
+    reactionsList: state.reactionsList
+  };
+}
+
+export default connect(mapStateToProps)(OrderItem);

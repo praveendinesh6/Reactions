@@ -5,7 +5,7 @@ const Tooltip = ({ children, text, ...otherProps }) => {
   const [timeoutId, setTimeoutId] = useState()
   return (
     <div className="tooltip-container">
-      <div className={show ? 'tooltip-box visible' : 'tooltip-box'}>
+      <div className={`tooltip-box ${show ? "visible" : ''}`}>
         {text}
         <span className="tooltip-arrow" />
       </div>

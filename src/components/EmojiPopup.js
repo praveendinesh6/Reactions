@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { useClickAway } from "react-use";
-import { reactionsList } from "./constants";
 import Tooltip from './Tooltip'
+import { connect } from 'react-redux';
 
-function EmojiPopup({ closeEmojiPopup, handleReactionClicked }) {
+function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsList }) {
   const ref = useRef(null);
   useClickAway(ref, () => {
     closeEmojiPopup();
@@ -30,4 +30,10 @@ function EmojiPopup({ closeEmojiPopup, handleReactionClicked }) {
   );
 }
 
-export default EmojiPopup;
+function mapStateToProps(state) {
+  return {
+    reactionsList: state.reactionsList
+  };
+}
+
+export default connect(mapStateToProps)(EmojiPopup);

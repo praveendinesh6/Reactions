@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import EmojiPopup from "./EmojiPopup";
+import {useHoverDirty} from 'react-use';
 
 function EmojiChooser({ handleReactionClicked }) {
   const [isOpen, setIsOpen] = useState(false);
+  const hoverRef = useRef(null);
+  const isHovering = useHoverDirty(hoverRef);
 
   const openEmojiPopup = () => {
     setIsOpen(true);
@@ -11,7 +14,7 @@ function EmojiChooser({ handleReactionClicked }) {
     setIsOpen(false);
   };
   return (
-    <div className="relative">
+    <div className="relative" ref={hoverRef}>
       {isOpen && (
         <EmojiPopup
           closeEmojiPopup={closeEmojiPopup}
