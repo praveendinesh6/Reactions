@@ -11,7 +11,6 @@ function UserReactions({
   reactionsList,
   currentUserId,
 }) {
-
   let reactionsCountList = [];
   reactionsList.forEach((reaction) => {
     let count = 0;
@@ -32,7 +31,7 @@ function UserReactions({
 
   return (
     <>
-      <div className="flex p-3">
+      <div className="flex flex-wrap p-3">
         {reactionsCountList.map((reactionInfo, index) => {
           return (
             <StatefulPopover
@@ -41,7 +40,7 @@ function UserReactions({
                 <Block>
                   <ReactionSummary
                     key={reactionInfo.id}
-                    defaultIndex={index+1}
+                    defaultIndex={index + 1}
                     reactionsCountList={reactionsCountList}
                     userContentReactionsList={userContentReactionsList}
                   />
@@ -53,19 +52,19 @@ function UserReactions({
               overrides={{
                 Inner: {
                   style: () => ({
-                    'background-color': '#fff',
-                    'border-radius': '4px'
-                  })
-                }
+                    "background-color": "#fff",
+                    "border-radius": "4px",
+                  }),
+                },
               }}
             >
               <Block>
                 <ReactionItem
-                reactionInfo={reactionInfo}
+                  reactionInfo={reactionInfo}
                   key={reactionInfo.id}
                   handleReactionClicked={handleReactionClicked}
-              />
-            </Block>
+                />
+              </Block>
             </StatefulPopover>
           );
         })}

@@ -1,47 +1,13 @@
-import { useState, useEffect } from "react";
 import UserReactions from "./UserReactions";
-import axios from "axios";
 import { connect } from "react-redux";
 
-function OrderItem({ orderItem, currentUserId }) {
-  const [userContentReactionsList, setuserContentReactionsList] = useState([]);
-
-  function fetchUserReactions() {
-    return axios
-      .get(
-        `https://artful-iudex.herokuapp.com/user_content_reactions?content_id=${orderItem.id}`
-      )
-      .then((response) => {
-        setuserContentReactionsList(response.data);
-      });
-  }
-
-  function handleRemoveReaction(userContentReactionInfo) {
-    return axios
-      .delete(
-        `https://artful-iudex.herokuapp.com/user_content_reactions/${userContentReactionInfo.id}`
-      )
-      .then(() => {
-        setuserContentReactionsList(
-          userContentReactionsList.filter((order) => {
-            return order.id !== userContentReactionInfo.id;
-          })
-        );
-      });
-  }
-  function handleAddReaction(reactionId) {
-    let data = {
-      reaction_id: reactionId,
-      user_id: currentUserId,
-      content_id: orderItem.id,
-    };
-    return axios
-      .post("https://artful-iudex.herokuapp.com/user_content_reactions/", data)
-      .then(() => {
-        data.id = userContentReactionsList.length + 1;
-        setuserContentReactionsList([...userContentReactionsList, data]);
-      });
-  }
+function OrderItem({
+  orderItem,
+  userContentReactionsList = [],
+  handleRemoveReaction,
+  handleAddReaction,
+  currentUserId,
+}) {
   function handleReactionClicked(reactionId) {
     let userContentReactionInfo = userContentReactionsList.find((orderInfo) => {
       return (
@@ -52,13 +18,9 @@ function OrderItem({ orderItem, currentUserId }) {
     if (userContentReactionInfo) {
       handleRemoveReaction(userContentReactionInfo);
     } else {
-      handleAddReaction(reactionId);
+      handleAddReaction(orderItem.id, reactionId);
     }
   }
-
-  useEffect(() => {
-    fetchUserReactions();
-  }, []);
 
   return (
     <div className="border border-gray-500 rounded mb-4">
@@ -97,7 +59,6 @@ function OrderItem({ orderItem, currentUserId }) {
 }
 function mapStateToProps(state) {
   return {
-    reactionsList: state.reactionsList,
     currentUserId: state.currentUserId,
   };
 }

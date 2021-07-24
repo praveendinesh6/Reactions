@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useClickAway } from "react-use";
-import Tooltip from './Tooltip'
-import { connect } from 'react-redux';
+import Tooltip from "./Tooltip";
+import { connect } from "react-redux";
 
 function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsList }) {
   const ref = useRef(null);
@@ -22,7 +22,9 @@ function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsList }) {
             onClick={() => handleOnClick(reaction.id)}
           >
             <Tooltip text={reaction.name}>
-              <div role="img" className="emoji" aria-label={reaction.name}>{reaction.emoji}</div>
+              <div role="img" className="emoji" aria-label={reaction.name}>
+                {reaction.emoji}
+              </div>
             </Tooltip>
           </div>
         );
@@ -33,7 +35,7 @@ function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsList }) {
 
 function mapStateToProps(state) {
   return {
-    reactionsList: state.reactionsList
+    reactionsList: state.reactionsList,
   };
 }
 
