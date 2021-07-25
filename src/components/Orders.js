@@ -51,6 +51,7 @@ function Orders({ currentUserId }) {
   }
   function handleAddReaction(orderId, reactionId) {
     let data = {
+      id: uuidv4(),
       reaction_id: reactionId,
       user_id: currentUserId,
       content_id: orderId,
@@ -58,7 +59,6 @@ function Orders({ currentUserId }) {
     return axios
       .post("https://artful-iudex.herokuapp.com/user_content_reactions/", data)
       .then(() => {
-        data.id = uuidv4();
         setContentReactionsList([...contentReactionsList, data]);
       });
   }
