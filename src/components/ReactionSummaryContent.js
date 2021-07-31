@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 function ReactionSummaryContent({ reactionId = '', userContentReactionsList, usersMap, reactionsMap }) {
   let userReactionList = []
@@ -38,6 +39,13 @@ function mapStateToProps(state) {
     usersMap: state.usersMap,
     reactionsMap: state.reactionsMap
   };
+}
+
+ReactionSummaryContent.propTypes = {
+  reactionId: PropTypes.number,
+  userContentReactionsList: PropTypes.array.isRequired,
+  usersMap: PropTypes.object.isRequired,
+  reactionsMap: PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps)(ReactionSummaryContent);

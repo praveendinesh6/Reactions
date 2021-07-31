@@ -2,8 +2,9 @@ import { useRef } from "react";
 import { useClickAway } from "react-use";
 import Tooltip from "./Tooltip";
 import { connect } from "react-redux";
+import PropTypes from 'prop-types';
 
-function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsList }) {
+function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsMap }) {
   const ref = useRef(null);
   useClickAway(ref, () => {
     closeEmojiPopup();
@@ -14,7 +15,8 @@ function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsList }) {
   };
   return (
     <div className="emoji-popup flex absolute" ref={ref}>
-      {reactionsList.map((reaction) => {
+      {Object.keys(reactionsMap).map((id) => {
+        let reaction = reactionsMap[id];
         return (
           <div
             className="emoji-popup-item"
@@ -35,8 +37,14 @@ function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsList }) {
 
 function mapStateToProps(state) {
   return {
-    reactionsList: state.reactionsList,
+    reactionsMap: state.reactionsMap,
   };
+}
+
+EmojiPopup.propTypes = {
+  closeEmojiPopup: PropTypes.func.isRequired,
+  handleReactionClicked: PropTypes.func.isRequired,
+  reactionsMap: PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps)(EmojiPopup);

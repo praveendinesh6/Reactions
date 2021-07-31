@@ -5,17 +5,19 @@ import { connect } from "react-redux";
 import { StatefulPopover, TRIGGER_TYPE } from "baseui/popover";
 import { Block } from "baseui/block";
 import { useState } from "react";
+import PropTypes from 'prop-types';
 
 function UserReactions({
   userContentReactionsList,
   handleReactionClicked,
-  reactionsList,
+  reactionsMap,
   currentUserId,
 }) {
   const [selectedSummaryReactionId, setSelectedSummaryReactionId] = useState();
 
   let reactionsCountList = [];
-  reactionsList.forEach((reaction) => {
+  Object.keys(reactionsMap).forEach((reactionId) => {
+    let reaction = reactionsMap[reactionId];
     let count = 0;
     let reactionCountInfo = { ...reaction };
     userContentReactionsList.forEach((orderItem) => {
@@ -82,9 +84,16 @@ function UserReactions({
 
 function mapStateToProps(state) {
   return {
-    reactionsList: state.reactionsList,
+    reactionsMap: state.reactionsMap,
     currentUserId: state.currentUserId,
   };
+}
+
+UserReactions.propTypes = {
+  userContentReactionsList: PropTypes.array.isRequired,
+  handleReactionClicked: PropTypes.func.isRequired,
+  reactionsMap: PropTypes.object.isRequired,
+  currentUserId: PropTypes.number.isRequired
 }
 
 export default connect(mapStateToProps)(UserReactions);

@@ -3,8 +3,6 @@ import ReduxThunk from "redux-thunk";
 import { keyBy } from "lodash";
 
 const initailState = {
-  usersList: [],
-  reactionsList: [],
   usersMap: {},
   reactionsMap: {},
   currentUserId: 20
@@ -14,13 +12,11 @@ const rootReducer = (state = initailState, action) => {
     case "FETCH_USERS_LIST":
       return {
         ...state,
-        usersList: action.payload,
         usersMap: keyBy(action.payload, "id"),
       };
     case "FETCH_REACTIONS_LIST":
       return {
         ...state,
-        reactionsList: action.payload,
         reactionsMap: keyBy(action.payload, "id"),
       };
     default:

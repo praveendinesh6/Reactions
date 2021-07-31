@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EmojiPopup from "./EmojiPopup";
+import PropTypes from 'prop-types';
 
 function EmojiChooser({ handleReactionClicked }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +24,10 @@ function EmojiChooser({ handleReactionClicked }) {
       </div>
     </div>
   );
+}
+
+EmojiChooser.propTypes = {
+  handleReactionClicked: PropTypes.func.isRequired
 }
 
 export default EmojiChooser;

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const Tooltip = ({ children, text, ...otherProps }) => {
   const [show, setShow] = useState(false);
@@ -25,5 +26,13 @@ const Tooltip = ({ children, text, ...otherProps }) => {
     </div>
   );
 };
+
+Tooltip.propTypes = {
+  children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ]).isRequired,
+  text: PropTypes.array.isRequired
+}
 
 export default Tooltip;

@@ -1,5 +1,6 @@
 import UserReactions from "../components/UserReactions";
 import { connect } from "react-redux";
+import PropTypes from 'prop-types';
 
 function OrderItem({
   orderItem,
@@ -61,6 +62,14 @@ function mapStateToProps(state) {
   return {
     currentUserId: state.currentUserId,
   };
+}
+
+OrderItem.propTypes = {
+  orderItem: PropTypes.object.isRequired,
+  userContentReactionsList: PropTypes.array,
+  handleRemoveReaction: PropTypes.func.isRequired,
+  handleAddReaction: PropTypes.func.isRequired,
+  currentUserId: PropTypes.number.isRequired,
 }
 
 export default connect(mapStateToProps)(OrderItem);

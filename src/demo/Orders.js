@@ -9,6 +9,7 @@ import {
   removeOrderReaction,
 } from "../api/reactions";
 import { fetchOrders } from "../api/orders";
+import PropTypes from 'prop-types';
 
 function Orders({ currentUserId }) {
   const [ordersList, setOrdersList] = useState([]);
@@ -86,6 +87,10 @@ function mapStateToProps(state) {
   return {
     currentUserId: state.currentUserId,
   };
+}
+
+Orders.propTypes = {
+  currentUserId: PropTypes.number.isRequired
 }
 
 export default connect(mapStateToProps)(Orders);

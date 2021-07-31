@@ -2,6 +2,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useEffect, useState } from "react";
 import ReactionSummaryContent from "./ReactionSummaryContent";
 import "react-tabs/style/react-tabs.css";
+import PropTypes from 'prop-types';
 
 function ReactionSummary({
   reactionsCountList,
@@ -66,6 +67,12 @@ function ReactionSummary({
       </Tabs>
     </div>
   );
+}
+
+ReactionSummary.propTypes = {
+  reactionsCountList: PropTypes.array.isRequired,
+  userContentReactionsList: PropTypes.array.isRequired,
+  selectedReactionId: PropTypes.number.isRequired
 }
 
 export default ReactionSummary;
