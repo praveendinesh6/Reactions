@@ -4,6 +4,7 @@ import ReactionSummary from "./ReactionSummary";
 import { connect } from "react-redux";
 import { StatefulPopover, TRIGGER_TYPE } from "baseui/popover";
 import { Block } from "baseui/block";
+import { useState } from "react";
 
 function UserReactions({
   userContentReactionsList,
@@ -11,6 +12,8 @@ function UserReactions({
   reactionsList,
   currentUserId,
 }) {
+  const [selectedSummaryReactionId, setSelectedSummaryReactionId] = useState();
+
   let reactionsCountList = [];
   reactionsList.forEach((reaction) => {
     let count = 0;
@@ -29,45 +32,48 @@ function UserReactions({
     }
   });
 
+  function handleReactionFocused(reactionId) {
+    setSelectedSummaryReactionId(reactionId);
+  }
+
   return (
     <>
       <div className="flex flex-wrap p-3">
-        {reactionsCountList.map((reactionInfo, index) => {
-          return (
-            <StatefulPopover
-              key={reactionInfo.id}
-              content={() => (
-                <Block>
-                  <ReactionSummary
-                    key={reactionInfo.id}
-                    defaultIndex={index + 1}
-                    reactionsCountList={reactionsCountList}
-                    userContentReactionsList={userContentReactionsList}
-                  />
-                </Block>
-              )}
-              triggerType={TRIGGER_TYPE.hover}
-              returnFocus
-              autoFocus
-              overrides={{
-                Inner: {
-                  style: () => ({
-                    "background-color": "#fff",
-                    "border-radius": "4px",
-                  }),
-                },
-              }}
-            >
-              <Block>
+        <StatefulPopover
+          content={() => (
+            <Block>
+              <ReactionSummary
+                selectedReactionId={selectedSummaryReactionId}
+                reactionsCountList={reactionsCountList}
+                userContentReactionsList={userContentReactionsList}
+              />
+            </Block>
+          )}
+          triggerType={TRIGGER_TYPE.hover}
+          returnFocus
+          autoFocus
+          overrides={{
+            Inner: {
+              style: () => ({
+                backgroundColor: "#fff",
+                borderRadius: "4px",
+              }),
+            },
+          }}
+        >
+          <Block className="flex">
+            {reactionsCountList.map((reactionInfo) => {
+              return (
                 <ReactionItem
                   reactionInfo={reactionInfo}
                   key={reactionInfo.id}
                   handleReactionClicked={handleReactionClicked}
+                  handleReactionFocused={handleReactionFocused}
                 />
-              </Block>
-            </StatefulPopover>
-          );
-        })}
+              );
+            })}
+          </Block>
+        </StatefulPopover>
         <EmojiChooser handleReactionClicked={handleReactionClicked} />
       </div>
     </>

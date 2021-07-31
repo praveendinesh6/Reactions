@@ -1,4 +1,4 @@
-import UserReactions from "./UserReactions";
+import UserReactions from "../components/UserReactions";
 import { connect } from "react-redux";
 
 function OrderItem({

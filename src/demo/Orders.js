@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+
 import OrderItem from "./OrderItem";
 import { groupBy } from "lodash";
 import { connect } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
+import {
+  fetchReactionForOrders,
+  addOrderReaction,
+  removeOrderReaction,
+} from "../api/reactions";
+import { fetchOrders } from "../api/orders";
 
 function Orders({ currentUserId }) {
   const [ordersList, setOrdersList] = useState([]);
@@ -13,12 +18,11 @@ function Orders({ currentUserId }) {
 
   const contentReactionsMap = groupBy(contentReactionsList, "content_id");
 
-  function fetchOrders() {
+  function fetchOrdersList() {
     setIsLoading(true);
-    return axios
-      .get("https://artful-iudex.herokuapp.com/orders")
-      .then((response) => {
-        setOrdersList(response["data"]);
+    return fetchOrders()
+      .then((responseData) => {
+        setOrdersList(responseData);
       })
       .catch(() => {
         setErrorMessage("Error while fetching orders list");
@@ -29,42 +33,30 @@ function Orders({ currentUserId }) {
   }
 
   function fetchContentReactions() {
-    return axios
-      .get(`https://artful-iudex.herokuapp.com/user_content_reactions`)
-      .then((response) => {
-        setContentReactionsList(response.data);
-      });
+    return fetchReactionForOrders().then((responseData) => {
+      setContentReactionsList(responseData);
+    });
   }
 
   function handleRemoveReaction(userContentReactionInfo) {
-    return axios
-      .delete(
-        `https://artful-iudex.herokuapp.com/user_content_reactions/${userContentReactionInfo.id}`
-      )
-      .then(() => {
-        setContentReactionsList(
-          contentReactionsList.filter((order) => {
-            return order.id !== userContentReactionInfo.id;
-          })
-        );
-      });
+    return removeOrderReaction(userContentReactionInfo.id).then(() => {
+      setContentReactionsList(
+        contentReactionsList.filter((order) => {
+          return order.id !== userContentReactionInfo.id;
+        })
+      );
+    });
   }
   function handleAddReaction(orderId, reactionId) {
-    let data = {
-      id: uuidv4(),
-      reaction_id: reactionId,
-      user_id: currentUserId,
-      content_id: orderId,
-    };
-    return axios
-      .post("https://artful-iudex.herokuapp.com/user_content_reactions/", data)
-      .then(() => {
-        setContentReactionsList([...contentReactionsList, data]);
-      });
+    return addOrderReaction(reactionId, currentUserId, orderId).then(
+      (responseData) => {
+        setContentReactionsList([...contentReactionsList, responseData]);
+      }
+    );
   }
 
   useEffect(() => {
-    fetchOrders();
+    fetchOrdersList();
     fetchContentReactions();
   }, []);
 

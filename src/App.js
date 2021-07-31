@@ -1,8 +1,9 @@
 import "./App.css";
 import { useEffect } from "react";
 import store from "./store";
-import Orders from "./components/Orders";
-import axios from "axios";
+import Orders from "./demo/Orders";
+import { fetchReactions } from "./api/reactions";
+import { fetchUsers } from "./api/users";
 import { LightTheme, BaseProvider } from "baseui";
 import { Client as Styletron } from "styletron-engine-atomic";
 import { Provider as StyletronProvider } from "styletron-react";
@@ -13,14 +14,10 @@ const engine = new Styletron();
 
 const fetchOrgInfo = () => async (dispatch) => {
   try {
-    let userResponse = await axios.get(
-      "https://artful-iudex.herokuapp.com/users"
-    );
-    dispatch(storeUsersLists(userResponse.data));
-    let reactionResponse = await axios.get(
-      "https://artful-iudex.herokuapp.com/reactions"
-    );
-    dispatch(storeReactionsList(reactionResponse.data));
+    let userResponse = await fetchUsers();
+    dispatch(storeUsersLists(userResponse));
+    let reactionResponse = await fetchReactions();
+    dispatch(storeReactionsList(reactionResponse));
   } catch (err) {}
 };
 
