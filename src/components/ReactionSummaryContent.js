@@ -1,8 +1,11 @@
-import { connect } from 'react-redux';
+import { useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 
-function ReactionSummaryContent({ reactionId = '', userContentReactionsList, usersMap, reactionsMap }) {
+function ReactionSummaryContent({ reactionId = '', userContentReactionsList }) {
+  const reactionsMap = useSelector((state) => state.reactionsMap)
+  const usersMap = useSelector((state) => state.usersMap)
   let userReactionList = []
+
   userContentReactionsList.forEach((reactionInfo) => {
     if (reactionId) {
       if (reactionInfo.reaction_id === reactionId) {
@@ -22,30 +25,30 @@ function ReactionSummaryContent({ reactionId = '', userContentReactionsList, use
   return (
       <div>
       {userReactionList.map((reactionInfo) => {
-        return <div className="reaction-summary-content-row flex px-4 py-2 items-center">
-          <img className="user-image rounded-full mr-3" src={usersMap[reactionInfo.user_id].avatar} alt={usersMap[reactionInfo.user_id].first_name} />
-          <div role="img" className="emoji pr-3" aria-label={reactionsMap[reactionInfo.reaction_id].name}>{reactionsMap[reactionInfo.reaction_id].emoji}</div>
+        const userInfo = usersMap[reactionInfo.user_id];
+        const reaction = reactionsMap[reactionInfo.reaction_id];
+        return <div className="reaction-summary-content-row flex px-4 py-2 items-center" key={userInfo.user_id}>
+          <img className="user-image rounded-full mr-3" src={userInfo.avatar} alt={userInfo.first_name} />
+          <div role="img" className="emoji pr-3" aria-label={reaction.name}>{reaction.emoji}</div>
           <div className="font-medium">
-          <span className="pr-1">{usersMap[reactionInfo.user_id].first_name}</span>
-          {usersMap[reactionInfo.user_id].last_name}</div>
+          <span className="pr-1">{userInfo.first_name}</span>
+          {userInfo.last_name}</div>
         </div>
       })}
       </div>
     )
 }
 
-function mapStateToProps(state) {
-  return {
-    usersMap: state.usersMap,
-    reactionsMap: state.reactionsMap
-  };
-}
-
 ReactionSummaryContent.propTypes = {
-  reactionId: PropTypes.number,
-  userContentReactionsList: PropTypes.array.isRequired,
-  usersMap: PropTypes.object.isRequired,
-  reactionsMap: PropTypes.object.isRequired
+  reactionId: PropTypes.number.isRequired,
+  userContentReactionsList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      content_id: PropTypes.number.isRequired,
+      user_id: PropTypes.number.isRequired,
+      reaction_id: PropTypes.number.isRequired,
+    })
+  ),
 }
 
-export default connect(mapStateToProps)(ReactionSummaryContent);
+export default (ReactionSummaryContent);

@@ -16,7 +16,12 @@ function ReactionItem({ reactionInfo, handleReactionClicked, handleReactionFocus
 }
 
 ReactionItem.propTypes = {
-  reactionInfo: PropTypes.object.isRequired,
+  reactionInfo: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      count: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      emoji: PropTypes.string.isRequired,
+    }),
   handleReactionClicked: PropTypes.func.isRequired,
   handleReactionFocused: PropTypes.func.isRequired
 }

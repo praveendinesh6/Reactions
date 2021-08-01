@@ -1,19 +1,17 @@
 import ReactionItem from "./ReactionItem";
 import EmojiChooser from "./EmojiChooser";
 import ReactionSummary from "./ReactionSummary";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { StatefulPopover, TRIGGER_TYPE } from "baseui/popover";
 import { Block } from "baseui/block";
 import { useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-function UserReactions({
-  userContentReactionsList,
-  handleReactionClicked,
-  reactionsMap,
-  currentUserId,
-}) {
+function UserReactions({ userContentReactionsList, handleReactionClicked }) {
   const [selectedSummaryReactionId, setSelectedSummaryReactionId] = useState();
+
+  const reactionsMap = useSelector((state) => state.reactionsMap);
+  const currentUserId = useSelector((state) => state.currentUserId);
 
   let reactionsCountList = [];
   Object.keys(reactionsMap).forEach((reactionId) => {
@@ -57,8 +55,8 @@ function UserReactions({
           overrides={{
             Inner: {
               style: () => ({
-                backgroundColor: "#fff",
-                borderRadius: "4px",
+                'background-color': "#fff",
+                'border-radius': "4px",
               }),
             },
           }}
@@ -82,18 +80,16 @@ function UserReactions({
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    reactionsMap: state.reactionsMap,
-    currentUserId: state.currentUserId,
-  };
-}
-
 UserReactions.propTypes = {
-  userContentReactionsList: PropTypes.array.isRequired,
+  userContentReactionsList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      content_id: PropTypes.number.isRequired,
+      user_id: PropTypes.number.isRequired,
+      reaction_id: PropTypes.number.isRequired,
+    })
+  ),
   handleReactionClicked: PropTypes.func.isRequired,
-  reactionsMap: PropTypes.object.isRequired,
-  currentUserId: PropTypes.number.isRequired
-}
+};
 
-export default connect(mapStateToProps)(UserReactions);
+export default UserReactions;

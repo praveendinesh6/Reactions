@@ -5,3 +5,5 @@ export function fetchUsers() {
     return response.data;
   });
 }
+
+export const UsersAPI = { fetchUsers }

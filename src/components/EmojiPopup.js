@@ -1,11 +1,12 @@
 import { useRef } from "react";
 import { useClickAway } from "react-use";
 import Tooltip from "./Tooltip";
-import { connect } from "react-redux";
-import PropTypes from 'prop-types';
+import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
-function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsMap }) {
+function EmojiPopup({ closeEmojiPopup, handleReactionClicked }) {
   const ref = useRef(null);
+  const reactionsMap = useSelector((state) => state.reactionsMap);
   useClickAway(ref, () => {
     closeEmojiPopup();
   });
@@ -35,16 +36,9 @@ function EmojiPopup({ closeEmojiPopup, handleReactionClicked, reactionsMap }) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    reactionsMap: state.reactionsMap,
-  };
-}
-
 EmojiPopup.propTypes = {
   closeEmojiPopup: PropTypes.func.isRequired,
   handleReactionClicked: PropTypes.func.isRequired,
-  reactionsMap: PropTypes.object.isRequired
-}
+};
 
-export default connect(mapStateToProps)(EmojiPopup);
+export default EmojiPopup;

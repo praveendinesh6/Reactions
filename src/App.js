@@ -1,30 +1,31 @@
 import "./App.css";
 import { useEffect } from "react";
-import store from "./store";
-import Orders from "./demo/Orders";
-import { fetchReactions } from "./api/reactions";
-import { fetchUsers } from "./api/users";
+import Orders from "./pages/Orders";
+import { ReactionsAPI } from "./api/reactions";
+import { UsersAPI } from "./api/users";
 import { LightTheme, BaseProvider } from "baseui";
 import { Client as Styletron } from "styletron-engine-atomic";
 import { Provider as StyletronProvider } from "styletron-react";
+import {useDispatch} from 'react-redux'
 
 import { storeUsersLists, storeReactionsList } from "./actions";
 
 const engine = new Styletron();
 
-const fetchOrgInfo = () => async (dispatch) => {
-  try {
-    let userResponse = await fetchUsers();
-    dispatch(storeUsersLists(userResponse));
-    let reactionResponse = await fetchReactions();
-    dispatch(storeReactionsList(reactionResponse));
-  } catch (err) {}
-};
-
 function App() {
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    store.dispatch(fetchOrgInfo());
-  }, []);
+    const fetchOrgInfo = async () => {
+      try {
+        let userResponse = await UsersAPI.fetchUsers();
+        dispatch(storeUsersLists(userResponse));
+        let reactionResponse = await ReactionsAPI.fetchReactions();
+        dispatch(storeReactionsList(reactionResponse));
+      } catch (err) {}
+    };
+    fetchOrgInfo()
+  }, [dispatch]);
 
   return (
     <StyletronProvider value={engine}>

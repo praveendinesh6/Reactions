@@ -32,7 +32,7 @@ Tooltip.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node
     ]).isRequired,
-  text: PropTypes.array.isRequired
+  text: PropTypes.string.isRequired
 }
 
 export default Tooltip;

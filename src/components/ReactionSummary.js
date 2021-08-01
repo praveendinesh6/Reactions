@@ -34,7 +34,7 @@ function ReactionSummary({
           </Tab>
           {reactionsCountList.map((reaction) => {
             return (
-              <Tab className="flex reaction-summary-tab items-center">
+              <Tab className="flex reaction-summary-tab items-center" key={reaction.id}>
                 <div
                   role="img"
                   className="emoji p-2 pr-3"
@@ -56,7 +56,7 @@ function ReactionSummary({
         </TabPanel>
         {reactionsCountList.map((reaction) => {
           return (
-            <TabPanel>
+            <TabPanel key={reaction.id}>
               <ReactionSummaryContent
                 reactionId={reaction.id}
                 userContentReactionsList={userContentReactionsList}
@@ -70,7 +70,14 @@ function ReactionSummary({
 }
 
 ReactionSummary.propTypes = {
-  reactionsCountList: PropTypes.array.isRequired,
+  reactionsCountList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      count: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      emoji: PropTypes.string.isRequired,
+    })
+  ),
   userContentReactionsList: PropTypes.array.isRequired,
   selectedReactionId: PropTypes.number.isRequired
 }

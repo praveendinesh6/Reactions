@@ -1,14 +1,15 @@
 import UserReactions from "../components/UserReactions";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 
 function OrderItem({
   orderItem,
   userContentReactionsList = [],
   handleRemoveReaction,
-  handleAddReaction,
-  currentUserId,
+  handleAddReaction
 }) {
+  const currentUserId = useSelector((state) => state.currentUserId)
+
   function handleReactionClicked(reactionId) {
     let userContentReactionInfo = userContentReactionsList.find((orderInfo) => {
       return (
@@ -17,9 +18,9 @@ function OrderItem({
       );
     });
     if (userContentReactionInfo) {
-      handleRemoveReaction(userContentReactionInfo);
+      handleRemoveReaction(userContentReactionInfo.id);
     } else {
-      handleAddReaction(orderItem.id, reactionId);
+      handleAddReaction(reactionId, currentUserId, orderItem.id);
     }
   }
 
@@ -32,23 +33,23 @@ function OrderItem({
         </div>
         <div>
           <div className="text-gray-500">Quantity</div>
-          <div>{orderItem.quantity}</div>
+          <div>{orderItem.quantity ? orderItem.quantity : '~'}</div>
         </div>
         <div>
           <div className="text-gray-500">Assignee Name</div>
-          <div>{orderItem.representative_name}</div>
+          <div>{orderItem.representative_name ? orderItem.representative_name : '~'}</div>
         </div>
         <div>
           <div className="text-gray-500">Region</div>
-          <div>{orderItem.region}</div>
+          <div>{orderItem.region ? orderItem.region : '~'}</div>
         </div>
         <div>
           <div className="text-gray-500">Order Date</div>
-          <div>{orderItem.order_date}</div>
+          <div>{orderItem.order_date ? orderItem.order_date : '~'}</div>
         </div>
         <div>
-          <div className="text-gray-500">Total</div>
-          <div>${orderItem.total}</div>
+          <div className="text-gray-500">Unit Cost</div>
+          <div>${orderItem.unit_cost}</div>
         </div>
       </div>
       <UserReactions
@@ -58,18 +59,25 @@ function OrderItem({
     </div>
   );
 }
-function mapStateToProps(state) {
-  return {
-    currentUserId: state.currentUserId,
-  };
-}
 
 OrderItem.propTypes = {
-  orderItem: PropTypes.object.isRequired,
-  userContentReactionsList: PropTypes.array,
+  orderItem: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    item: PropTypes.string.isRequired,
+    unit_cost: PropTypes.number.isRequired,
+    order_date: PropTypes.string,
+    quantity: PropTypes.number,
+    region: PropTypes.string,
+    representative_name: PropTypes.string
+  }),
+  userContentReactionsList: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    content_id: PropTypes.number.isRequired,
+    user_id: PropTypes.number.isRequired,
+    reaction_id: PropTypes.number.isRequired,
+  })),
   handleRemoveReaction: PropTypes.func.isRequired,
   handleAddReaction: PropTypes.func.isRequired,
-  currentUserId: PropTypes.number.isRequired,
 }
 
-export default connect(mapStateToProps)(OrderItem);
+export default OrderItem;
